@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(1deg); }
+            66% { transform: translateY(-20px) rotate(-1deg); }
+        }
+
+        /* Glassmorphism Container */
+        .glass-container {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #f0f9ff 50%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.6)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 50%, #ff6b9d 100%);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Dark mode toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .glass-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: particle-float 6s infinite linear;
+        }
+
+        @keyframes particle-float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="main-content">
+        <div class="glass-container">
+            <h1 class="hero-title">AI Performance Predictor</h1>
+            <p class="hero-subtitle">
+                Unlock your academic potential with our cutting-edge machine learning algorithm. 
+                Get instant predictions for student performance based on comprehensive data analysis.
+            </p>
+            
+            <a href="/predictdata" class="cta-button">
+                <i class="fas fa-rocket"></i> Start Prediction
+            </a>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="feature-title">AI Powered</div>
+                    <div class="feature-desc">Advanced ML algorithms for accurate predictions</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightning-bolt"></i>
+                    </div>
+                    <div class="feature-title">Instant Results</div>
+                    <div class="feature-desc">Get predictions in seconds, not minutes</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="feature-title">Data Driven</div>
+                    <div class="feature-desc">Based on comprehensive academic datasets</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 8000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 300);
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const toggle = document.querySelector('.theme-toggle i');
+            
+            if (body.style.filter === 'invert(1) hue-rotate(180deg)') {
+                body.style.filter = '';
+                toggle.className = 'fas fa-moon';
+            } else {
+                body.style.filter = 'invert(1) hue-rotate(180deg)';
+                toggle.className = 'fas fa-sun';
+            }
+        }
+
+        // Add some interactive elements
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.createElement('div');
+            cursor.style.position = 'absolute';
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.width = '4px';
+            cursor.style.height = '4px';
+            cursor.style.background = 'rgba(255, 255, 255, 0.5)';
+            cursor.style.borderRadius = '50%';
+            cursor.style.pointerEvents = 'none';
+            cursor.style.zIndex = '9999';
+            cursor.style.animation = 'fadeOut 1s ease-out forwards';
+            
+            document.body.appendChild(cursor);
+            
+            setTimeout(() => cursor.remove(), 1000);
+        });
+
+        // Add fadeOut animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                0% { opacity: 1; transform: scale(1); }
+                100% { opacity: 0; transform: scale(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
